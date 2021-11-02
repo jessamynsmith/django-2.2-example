@@ -1,14 +1,26 @@
 from django import forms
-from django.contrib.auth.models import User
+
+from example import models as example_models
 
 
-class UserForm(forms.ModelForm):
+class UserProfileForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username']
+        model = example_models.UserProfile
+        fields = ['birthday']
 
 
-class ExtendedUserForm(UserForm):
-    class Meta(UserForm.Meta):
-        fields = ['first_name']
-        fields.extend(UserForm.Meta.fields)
+class ExtendedUserProfileForm(UserProfileForm):
+    class Meta(UserProfileForm.Meta):
+        fields = ['nickname']
+        fields.extend(UserProfileForm.Meta.fields)
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        obj.user = self.user
+        if commit:
+            obj.save()
+        return obj
