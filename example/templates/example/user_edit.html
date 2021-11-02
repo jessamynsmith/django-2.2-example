@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+    <h3>Edit User</h3>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% trans "Save" %}</button>
+    </form>
+
+{% endblock %}

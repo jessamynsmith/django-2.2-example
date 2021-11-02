@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic import FormView
 
-# Create your views here.
+from example.forms import ExtendedUserForm
+
+
+class UserEditView(FormView):
+    form_class = ExtendedUserForm
+    template_name = 'example/user_edit.html'
