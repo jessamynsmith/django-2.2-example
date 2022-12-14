@@ -1,6 +1,8 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 
 from rest_framework import serializers, viewsets
 
@@ -28,3 +30,16 @@ class UserEditView(LoginRequiredMixin, CreateView):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
+
+class UserProfileJsonView(LoginRequiredMixin, DetailView):
+    model = models.UserProfile
+    template_name = 'example/user_profile_json.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        serializer_class = UserProfileSerializer(instance=self.object)
+        json_data = serializer_class.data
+        formatted_data = json.dumps(json_data, indent=4)
+        context_data['json_data'] = formatted_data
+        return context_data

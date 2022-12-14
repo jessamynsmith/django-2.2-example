@@ -10,5 +10,6 @@ router.register('users', views.UserProfileViewSet, basename="user_profile")
 
 urlpatterns = [
     path('user/edit/', views.UserEditView.as_view(), name="user_edit"),
+    path('user/<int:pk>/json/', views.UserProfileJsonView.as_view(), name="user_json"),
     path('', include(router.urls)),
 ]
